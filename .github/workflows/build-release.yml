@@ -1,0 +1,68 @@
+name: Build and Release LLVM
+
+on:
+  push:
+    branches:
+      - 'release-*'
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: |
+          brew install cmake ninja
+      
+      - name: Extract LLVM version from branch
+        id: version
+        run: |
+          BRANCH_NAME="${{ github.ref_name }}"
+          LLVM_VERSION="${BRANCH_NAME#release-}"
+          echo "llvm_version=$LLVM_VERSION" >> $GITHUB_OUTPUT
+          echo "Building LLVM version: $LLVM_VERSION"
+      
+      - name: Build LLVM
+        run: |
+          ./build.sh "${{ steps.version.outputs.llvm_version }}"
+      
+      - name: Upload to GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ARTIFACT=$(ls llvm-*.tar.gz | head -1)
+          ./upload.sh "${{ steps.version.outputs.llvm_version }}" "$ARTIFACT"
+
+  build-linux:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build
+      
+      - name: Extract LLVM version from branch
+        id: version
+        run: |
+          BRANCH_NAME="${{ github.ref_name }}"
+          LLVM_VERSION="${BRANCH_NAME#release-}"
+          echo "llvm_version=$LLVM_VERSION" >> $GITHUB_OUTPUT
+          echo "Building LLVM version: $LLVM_VERSION"
+      
+      - name: Build LLVM
+        run: |
+          ./build.sh "${{ steps.version.outputs.llvm_version }}"
+      
+      - name: Upload to GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ARTIFACT=$(ls llvm-*.tar.gz | head -1)
+          ./upload.sh "${{ steps.version.outputs.llvm_version }}" "$ARTIFACT"
