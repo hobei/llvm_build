@@ -14,7 +14,7 @@ ARTIFACT_PATH="${2}"
 
 if [ -z "$LLVM_VERSION" ] || [ -z "$ARTIFACT_PATH" ]; then
     echo -e "${RED}Usage: $0 <llvm-version> <artifact-path>${NC}"
-    echo "Example: $0 llvmorg-20.1.0 llvm-llvmorg-20.1.0-install.tar.gz"
+    echo "Example: $0 llvmorg-21.1.8 llvm-llvmorg-21.1.8-install.tar.gz"
     exit 1
 fi
 

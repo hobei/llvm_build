@@ -8,7 +8,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Default branch (can be overridden by first argument)
-LLVM_BRANCH="${1:-llvmorg-20.1.0}"
+LLVM_BRANCH="${1:-llvmorg-21.1.8}"
 
 echo -e "${BLUE}=== LLVM Build Script ===${NC}"
 echo -e "${BLUE}Branch: $LLVM_BRANCH${NC}\n"
