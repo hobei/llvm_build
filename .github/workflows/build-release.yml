@@ -5,6 +5,9 @@ on:
     branches:
       - 'release-*'
 
+permissions:
+  contents: write  # Required for creating releases and uploading assets
+
 jobs:
   build-macos:
     runs-on: macos-latest
